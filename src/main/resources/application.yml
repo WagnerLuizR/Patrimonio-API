@@ -1,0 +1,37 @@
+server:
+  port: 4211
+spring:
+  profiles:
+    active: ${PROFILE_ACTIVE:development}
+  jpa:
+    show-sql: true
+    format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,loggers
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: PROFILE
+  datasource:
+    url:
+    driver:
+    username:
+    password:
+    jpa:
+      properties:
+        hibernate:
+          default_schema:
+    logging:
+      level:
+        root: WARN
