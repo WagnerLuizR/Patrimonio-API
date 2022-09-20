@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface AreaRepository extends JpaRepository<Area, Long> {
-    @Query(value = """
+@Repository // define essa interace como um reposiotório
+public interface AreaRepository extends JpaRepository<Area, Long> { // utiliza JPA para gedir este repositório
+
+    //@query permite que seja desenvolvido querys em JPQL e nativeQuery podendo ser referênciado por um metodo
+    @Query(value = """                                      
             select a from Area a
             where (:search is null)
             or concat(a.id,'') like lower(concat('%',:search,'%'))

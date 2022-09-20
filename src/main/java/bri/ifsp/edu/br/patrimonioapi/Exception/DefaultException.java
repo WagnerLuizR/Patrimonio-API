@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class DefaultException extends Exception {
+public class DefaultException extends Exception { //metodo para gerar excessão customizada por string
 
     public DefaultException() {
         super();

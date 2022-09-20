@@ -28,12 +28,14 @@ public class Patrimonio {
     @Column(name = "ESTADO")
     private Integer estado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_AREA")
+    @ManyToOne(fetch = FetchType.LAZY)                          //referência do relacionamento de muitos para um com fetchType sendo Lazy
+    @JoinColumn(name = "ID_AREA")                               //sabendo a coluna de referência relacionma apenas o id da entidade para unificar
+                                                                // na coluna da tabela que vai armazenar apenas o id
     private Area area;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "patrimonio")
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "patrimonio")  //referência do relacionamento de um para muitos que
+                                                                // está sendo referenciado na entidade lista
+    @JsonIgnore                                                 // permite que o jackson ignore essa entidade no json de qualquer requisição
     private Set<Lista> lista;
 
 

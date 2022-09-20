@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1891c945-b6e6-4892-9144-b8328556667d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Configuration/WebConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Controller/ListaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Controller/ListaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Area.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Area.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Lista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Lista.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/DTO/UsuarioDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/DTO/UsuarioDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Patrimonio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Patrimonio.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Usuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Repository/ListaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Repository/ListaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
