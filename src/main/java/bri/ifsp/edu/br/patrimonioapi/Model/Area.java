@@ -12,13 +12,12 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TBAREA")
-@SequenceGenerator(name = "SEQ_TB_AREA", sequenceName = "SEQ_TB_AREA", allocationSize = 1)
+@Table(name = "TB_AREA")
 public class Area {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_AREA")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "NOME_AREA")

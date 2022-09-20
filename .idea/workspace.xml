@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1891c945-b6e6-4892-9144-b8328556667d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Configuration/WebConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Controller/ListaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Controller/ListaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Area.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Area.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Lista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Lista.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Patrimonio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Patrimonio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Repository/ListaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bri/ifsp/edu/br/patrimonioapi/Repository/ListaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="false" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration name="PatrimonioApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="PatrimonioAPI" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="bri.ifsp.edu.br.patrimonioapi.PatrimonioApiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

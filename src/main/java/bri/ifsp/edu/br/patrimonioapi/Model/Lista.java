@@ -13,13 +13,12 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TBLISTA")
-@SequenceGenerator(name = "SEQ_TB_LISTA", sequenceName = "SEQ_TB_LISTA", allocationSize = 1)
+@Table(name = "TB_LISTA")
 public class Lista extends AbstractAuditEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_LISTA")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

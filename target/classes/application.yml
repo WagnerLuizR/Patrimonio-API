@@ -1,0 +1,35 @@
+server:
+  port: 4211
+spring:
+  profiles:
+    active: ${PROFILE_ACTIVE:dev}
+  jpa:
+    show-sql: true
+    format_sql: true
+    hibernate:
+      ddl-auto=create:
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,loggers
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/patrimonio
+    driver: com.mysql.jdbc.Driver
+    username: root
+    password: awdwsj123
+    jpa:
+      properties:
+        hibernate:
+          default_schema: Patrimonio
+    logging:
+      level:
+        root: WARN

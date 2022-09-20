@@ -21,7 +21,7 @@ public class ListaController {
     private final ListaRepository listaRepository;
 
     @GetMapping
-    public ResponseEntity<Page<Lista>> getArea(@RequestParam(required = false) String search,
+    public ResponseEntity<Page<Lista>> getLista(@RequestParam(required = false) String search,
                                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(listaRepository.findAllPaginatedWithSearch(search, pageable));
     }

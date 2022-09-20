@@ -2,14 +2,12 @@ server:
   port: 4211
 spring:
   profiles:
-    active: ${PROFILE_ACTIVE:development}
+    active: ${PROFILE_ACTIVE:dev}
   jpa:
     show-sql: true
     format_sql: true
-  servlet:
-    multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
+    hibernate:
+      ddl-auto=create:
 
 management:
   endpoints:
@@ -22,16 +20,69 @@ management:
 spring:
   config:
     activate:
-      on-profile: PROFILE
+      on-profile: dev
   datasource:
-    url:
-    driver:
-    username:
-    password:
+    url: jdbc:mysql://localhost:3306/patrimonio
+    driver: com.mysql.jdbc.Driver
+    username: root
+    password: awdwsj123
     jpa:
       properties:
         hibernate:
-          default_schema:
+          default_schema: Patrimonio
     logging:
       level:
         root: WARN
+
+
+
+
+
+
+#-- patrimonio.TB_AREA definition
+#
+#CREATE TABLE `TB_AREA` (
+#  `ID` int NOT NULL,
+#  `NOME_AREA` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+#  `TIPO_AREA` int DEFAULT NULL,
+#  PRIMARY KEY (`ID`)
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+#
+#  CREATE TABLE `TB_LISTA` (
+#  `ID` int NOT NULL,
+#  `ID_AREA` int DEFAULT NULL,
+#  `ID_USUARIO` int DEFAULT NULL,
+#  `ID_PATRIMONIO` int DEFAULT NULL,
+#  KEY `TB_LISTA_FK_1` (`ID`),
+#  KEY `TB_LISTA_FK` (`ID_AREA`),
+#  KEY `TB_LISTA_FK_2` (`ID_PATRIMONIO`),
+#  CONSTRAINT `TB_LISTA_FK` FOREIGN KEY (`ID_AREA`) REFERENCES `TB_AREA` (`ID`),
+#  CONSTRAINT `TB_LISTA_FK_1` FOREIGN KEY (`ID`) REFERENCES `TB_USUARIO` (`ID`),
+#  CONSTRAINT `TB_LISTA_FK_2` FOREIGN KEY (`ID_PATRIMONIO`) REFERENCES `TB_PATRIMONIO` (`CODIGO`)
+#  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+#-- patrimonio.TB_PATRIMONIO definition
+#
+#CREATE TABLE `TB_PATRIMONIO` (
+#  `CODIGO` int NOT NULL,
+#  `DESC_PATRIMONIO` varchar(255) DEFAULT NULL,
+#  `ESTADO` int DEFAULT NULL,
+#  `ID_AREA` int DEFAULT NULL,
+#  PRIMARY KEY (`CODIGO`),
+#  KEY `TB_PATRIMONIO_FK` (`ID_AREA`),
+#  CONSTRAINT `TB_PATRIMONIO_FK` FOREIGN KEY (`ID_AREA`) REFERENCES `TB_AREA` (`ID`)
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+#CREATE TABLE `TB_USUARIO` (
+#  `ID` int NOT NULL,
+#  `PRONTUARIO` varchar(100) NOT NULL,
+#  `NOME` varchar(100) DEFAULT NULL,
+#  `SENHA` varchar(45) DEFAULT NULL,
+#  `NIVELACESSO` int DEFAULT NULL,
+#  PRIMARY KEY (`ID`)
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

@@ -1,24 +1,25 @@
 package bri.ifsp.edu.br.patrimonioapi.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TBPATRIMONIO")
-@SequenceGenerator(name = "SEQ_TB_PATRIMONIO", sequenceName = "SEQ_TB_PATRIMONIO", allocationSize = 1)
+@Table(name = "TB_PATRIMONIO")
 public class Patrimonio {
 
     @Id
     @Column(name = "CODIGO")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_PATRIMONIO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo;
 
     @Column(name = "desc_patrimonio")
@@ -30,5 +31,10 @@ public class Patrimonio {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_AREA")
     private Area area;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "patrimonio")
+    @JsonIgnore
+    private Set<Lista> lista;
+
 
 }
