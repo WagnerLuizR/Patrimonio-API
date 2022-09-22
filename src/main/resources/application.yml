@@ -25,7 +25,7 @@ spring:
     url: jdbc:mysql://localhost:3306/patrimonio
     driver: com.mysql.jdbc.Driver
     username: root
-    password: awdwsj123
+    password:
     jpa:
       properties:
         hibernate:
@@ -66,14 +66,13 @@ spring:
 
 #-- patrimonio.TB_PATRIMONIO definition
 #
-#CREATE TABLE `TB_PATRIMONIO` (
-#  `CODIGO` int NOT NULL,
-#  `DESC_PATRIMONIO` varchar(255) DEFAULT NULL,
-#  `ESTADO` int DEFAULT NULL,
-#  `ID_AREA` int DEFAULT NULL,
-#  PRIMARY KEY (`CODIGO`),
-#  KEY `TB_PATRIMONIO_FK` (`ID_AREA`),
-#  CONSTRAINT `TB_PATRIMONIO_FK` FOREIGN KEY (`ID_AREA`) REFERENCES `TB_AREA` (`ID`)
+#CREATE TABLE `TB_USUARIO` (
+#  `ID` int NOT NULL,
+#  `PRONTUARIO` varchar(100) NOT NULL,
+#  `NOME` varchar(100) DEFAULT NULL,
+#  `SENHA` varchar(45) DEFAULT NULL,
+#  `NIVELACESSO` int DEFAULT NULL,
+#  PRIMARY KEY (`ID`)
 #) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 

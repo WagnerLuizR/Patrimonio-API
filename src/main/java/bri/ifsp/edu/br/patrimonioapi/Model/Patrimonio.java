@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_PATRIMONIO")
-public class Patrimonio {
+public class Patrimonio implements Serializable {
 
     @Id
     @Column(name = "CODIGO")

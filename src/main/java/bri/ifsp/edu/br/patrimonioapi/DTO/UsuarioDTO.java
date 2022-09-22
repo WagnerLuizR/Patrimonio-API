@@ -5,12 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import java.io.Serializable;
+
 @Data //gera tanto os getters e setters como algumas outras pré-configurações
 @NoArgsConstructor
-public class UsuarioDTO {
+public class UsuarioDTO implements Serializable {
 
-    private Long id;
-    private Long prontuario;
+    private Integer id;
+    private String prontuario;
     private String nome;
     private String senha;
     private Integer nivelAcesso;

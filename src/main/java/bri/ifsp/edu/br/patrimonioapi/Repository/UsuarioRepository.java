@@ -19,4 +19,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
             or lower(u.nome) like lower(concat('%',:search,'%'))
             """)
     Page<Usuario> findAllPaginatedWithSearch(Pageable pageable, @Param("search") String search);
+
+    @Query(value = """
+            select u from Usuario u
+            where u.id = :id
+            """)
+    Usuario findByIntId(@Param("id") Integer id);
 }
