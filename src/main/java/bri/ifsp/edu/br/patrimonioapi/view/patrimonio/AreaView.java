@@ -31,6 +31,11 @@ public class AreaView extends JFrame {
     private ModelResponse<Area> modelResponse;
 
     private ModelResponse<ErrorsData> errors;
+    private JLabel lblParaPreecherO;
+    private JLabel lblNewLabel_1;
+    private JLabel lblNewLabel_2;
+    private JLabel lblNewLabel_3;
+    private JLabel lblNewLabel;
 
 
     /**
@@ -58,7 +63,7 @@ public class AreaView extends JFrame {
             btnCancelar.setFont(new Font("Verdana", Font.BOLD, 20));
             btnCancelar.setBounds(347, 24, 149, 52);
         } else if (opcaoCadastro == Constantes.EXCLUIR) {
-            consultarArea(area.getId());
+            excluirArea(area.getId());
             btnSalvar.setText("Excluir");
             btnSalvar.setFont(new Font("Verdana", Font.BOLD, 20));
             btnSalvar.setBounds(178, 24, 149, 52);
@@ -84,15 +89,16 @@ public class AreaView extends JFrame {
         contentPane.setLayout(null);
 
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(30, 144, 255));
+        panel.setBackground(new Color(48, 101,172));
         panel.setBounds(0, 0, 688, 523);
         contentPane.add(panel);
         panel.setLayout(null);
 
         JLabel lbldescArea = new JLabel("Descrição:");
+        lbldescArea.setForeground(new Color(121, 210, 230));
         lbldescArea.setHorizontalAlignment(SwingConstants.CENTER);
         lbldescArea.setFont(new Font("Verdana", Font.BOLD, 20));
-        lbldescArea.setBounds(21, 60, 124, 36);
+        lbldescArea.setBounds(40, 105, 124, 36);
         panel.add(lbldescArea);
 
         nomeArea = new JTextField();
@@ -115,32 +121,65 @@ public class AreaView extends JFrame {
         nomeArea.setBorder(null);
         nomeArea.setColumns(10);
         nomeArea.setFont(new Font("Verdana", Font.PLAIN, 20));
-        nomeArea.setBounds(189, 60, 403, 36);
+        nomeArea.setBounds(186, 105, 403, 36);
         panel.add(nomeArea);
 
         JLabel lblTipoArea = new JLabel("Tipo de Área:");
+        lblTipoArea.setForeground(new Color(121, 210, 230));
         lblTipoArea.setHorizontalAlignment(SwingConstants.CENTER);
         lblTipoArea.setFont(new Font("Verdana", Font.BOLD, 20));
-        lblTipoArea.setBounds(13, 126, 166, 36);
+        lblTipoArea.setBounds(10, 168, 166, 36);
         panel.add(lblTipoArea);
 
         tipoArea = new JTextField();
         tipoArea.setFont(new Font("Verdana", Font.PLAIN, 20));
         tipoArea.setColumns(10);
         tipoArea.setBorder(null);
-        tipoArea.setBounds(189, 126, 403, 36);
+        tipoArea.setBounds(186, 168, 403, 36);
         panel.add(tipoArea);
 
         mensagemNomeArea = new JLabel("");
-        mensagemNomeArea.setBounds(179, 60, 403, 14);
+        mensagemNomeArea.setBounds(186, 115, 403, 14);
         panel.add(mensagemNomeArea);
 
         mensagemTipoArea = new JLabel("");
-        mensagemTipoArea.setBounds(179, 126, 403, 14);
+        mensagemTipoArea.setBounds(186, 178, 403, 14);
         panel.add(mensagemTipoArea);
 
+        JLabel lblTelaCadastroArea = new JLabel("Cadastro de Área");
+        lblTelaCadastroArea.setForeground(new Color(121, 210, 230));
+        lblTelaCadastroArea.setBackground(new Color(121, 210,2));
+        lblTelaCadastroArea.setFont(new Font("Verdana", Font.BOLD, 30));
+        lblTelaCadastroArea.setBounds(26, 11, 330, 36);
+        panel.add(lblTelaCadastroArea);
+
+        lblParaPreecherO = new JLabel("Para Preecher o Tipo e Área, Digite:");
+        lblParaPreecherO.setForeground(new Color(121, 210, 230));
+        lblParaPreecherO.setBounds(53, 274, 197, 36);
+        panel.add(lblParaPreecherO);
+
+        lblNewLabel_1 = new JLabel("1 - Externa");
+        lblNewLabel_1.setForeground(new Color(121, 210, 230));
+        lblNewLabel_1.setBounds(53, 303, 181, 36);
+        panel.add(lblNewLabel_1);
+
+        lblNewLabel_2 = new JLabel("2 - Sala de Aula");
+        lblNewLabel_2.setForeground(new Color(121, 210, 230));
+        lblNewLabel_2.setBounds(53, 338, 257, 14);
+        panel.add(lblNewLabel_2);
+
+        lblNewLabel_3 = new JLabel("3  - Laborátório");
+        lblNewLabel_3.setForeground(new Color(121, 210, 230));
+        lblNewLabel_3.setBounds(53, 363, 257, 14);
+        panel.add(lblNewLabel_3);
+
+        lblNewLabel = new JLabel("4  - Administrativo");
+        lblNewLabel.setForeground(new Color(121, 210, 230));
+        lblNewLabel.setBounds(53, 388, 257, 14);
+        panel.add(lblNewLabel);
+
         JPanel panelBotoes = new JPanel();
-        panelBotoes.setBackground(new Color(0, 128, 0));
+        panelBotoes.setBackground(new Color(121, 210, 230));
         panelBotoes.setBounds(0, 521, 696, 99);
         contentPane.add(panelBotoes);
         panelBotoes.setLayout(null);
@@ -234,9 +273,10 @@ public class AreaView extends JFrame {
 
 
     @SuppressWarnings("unchecked")
-    public void excluirPatrimonio() {
+    public void excluirArea(Long id) {
         areaService = getAreaService();
-        setPatrimonioFromView();
+        area = getArea();
+        area.setId(id);
         modelResponse = (ModelResponse<Area>) areaService.excluir(area);
         if (modelResponse.isError()) {
             JOptionPane.showMessageDialog(null, modelResponse.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

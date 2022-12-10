@@ -1,32 +1,22 @@
 package bri.ifsp.edu.br.patrimonioapi.view.patrimonio;
 
-import java.awt.Font;
+import bri.ifsp.edu.br.patrimonioapi.DTO.AreaDTO;
+import bri.ifsp.edu.br.patrimonioapi.config.Constantes;
+import bri.ifsp.edu.br.patrimonioapi.config.Page;
+import bri.ifsp.edu.br.patrimonioapi.model.Area;
+import bri.ifsp.edu.br.patrimonioapi.service.AreaService;
+import bri.ifsp.edu.br.patrimonioapi.view.table.RenderHeaderTable;
+import bri.ifsp.edu.br.patrimonioapi.view.table.RenderTable;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableColumn;
-
-import bri.ifsp.edu.br.patrimonioapi.config.Constantes;
-import bri.ifsp.edu.br.patrimonioapi.config.Page;
-import bri.ifsp.edu.br.patrimonioapi.model.Area;
-import bri.ifsp.edu.br.patrimonioapi.model.Patrimonio;
-import bri.ifsp.edu.br.patrimonioapi.service.AreaService;
-import bri.ifsp.edu.br.patrimonioapi.service.PatrimonioService;
-import bri.ifsp.edu.br.patrimonioapi.view.table.RenderHeaderTable;
-import bri.ifsp.edu.br.patrimonioapi.view.table.RenderTable;
 
 public class TabelaAreaView extends JFrame {
 
@@ -47,9 +37,10 @@ public class TabelaAreaView extends JFrame {
     private JButton btnConsultar;
     private JButton btnSair;
     private TabelaAreaModel model;
-    private Page<Area> page;
+    private Page<AreaDTO> page;
     private AreaService areaService;
-    private Area area;
+    private AreaDTO area;
+    private Area areaEntity;
     private int linha = 0;
     private int coluna = 0;
     private int tamanhoPagina = 10;
@@ -109,7 +100,7 @@ public class TabelaAreaView extends JFrame {
 
         btnIncluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	showAreaFrame(Constantes.INCLUIR);
+            	showAreaFrame(Constantes.INCLUIR,true);
                 iniciarTabela();
             }
         });
@@ -123,14 +114,14 @@ public class TabelaAreaView extends JFrame {
         btnAlterar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getLinhaTabela();
-                showAreaFrame(Constantes.ALTERAR);
+                showAreaFrame(Constantes.ALTERAR,true);
                 iniciarTabela();
             }
         });
         btnExcluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getLinhaTabela();
-                showAreaFrame(Constantes.EXCLUIR);
+                showAreaFrame(Constantes.EXCLUIR,false);
                 iniciarTabela();
 
             }
@@ -138,7 +129,7 @@ public class TabelaAreaView extends JFrame {
         btnConsultar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getLinhaTabela();
-                showAreaFrame(Constantes.CONSULTAR);
+                showAreaFrame(Constantes.CONSULTAR,true);
             }
         });
         nomePesquisa.addKeyListener(new KeyAdapter() {
@@ -237,7 +228,7 @@ public class TabelaAreaView extends JFrame {
         btnConsultar.setFont(new Font("Verdana", Font.BOLD, 14));
         btnConsultar.setBounds(307, 478, 127, 33);
         contentPane.add(btnConsultar);
-        
+
         btnSair = new JButton("Fechar");
         btnSair.setFont(new Font("Verdana", Font.BOLD, 14));
         btnSair.setBounds(645, 478, 127, 33);
@@ -266,27 +257,30 @@ public class TabelaAreaView extends JFrame {
         for (int col = 0; col < model.getColumnCount(); col++) {
             TableColumn coluna = tabelaArea.getColumnModel().getColumn(col);
             coluna.setMinWidth(100);
-            coluna.setMaxWidth(100);
-            coluna.setPreferredWidth(100);
+            coluna.setMaxWidth(300);
+            coluna.setPreferredWidth(200);
         }
     }
 
 
     private void getLinhaTabela() {
         area = getArea();
+        areaEntity = getAreaEntity();
         if (tabelaArea.getSelectedRow() != -1) {
             linha = tabelaArea.getSelectedRow();
             coluna = tabelaArea.getSelectedColumn();
             area = model.getArea(linha);
+
+            areaEntity = new Area(model.getArea(linha));
         } else {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na Tabela", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void showAreaFrame(Integer opcaoCadastro) {
-        AreaView view = new AreaView(area, opcaoCadastro);
+    private void showAreaFrame(Integer opcaoCadastro,boolean showArea) {
+        AreaView view = new AreaView(areaEntity, opcaoCadastro);
         view.setLocationRelativeTo(null);
-        view.setVisible(true);
+        view.setVisible(showArea);
     }
 
     private void listarArea() {
@@ -294,9 +288,9 @@ public class TabelaAreaView extends JFrame {
         areaService = getAreaService();
 
         if (nomePesquisa.equals("")) {
-            page = areaService.listaPaginada(paginaAtual, tamanhoPagina);
+            page =  areaService.dtoPaginado(paginaAtual, tamanhoPagina);
         } else {
-            page = areaService.listaPaginada(paginaAtual, tamanhoPagina, nomePesquisa.getText());
+            page = areaService.dtoPaginado(paginaAtual, tamanhoPagina, nomePesquisa.getText());
         }
 
         if (paginaAtual == 1) {
@@ -343,7 +337,11 @@ public class TabelaAreaView extends JFrame {
         this.coluna = coluna;
     }
 
-    public Area getArea() {
+    public AreaDTO getArea() {
+        return new AreaDTO();
+    }
+
+    public Area getAreaEntity(){
         return new Area();
     }
 }

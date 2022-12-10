@@ -1,10 +1,11 @@
 package bri.ifsp.edu.br.patrimonioapi.service;
 
 import bri.ifsp.edu.br.patrimonioapi.DAO.AreaDAO;
+import bri.ifsp.edu.br.patrimonioapi.DTO.AreaDTO;
+import bri.ifsp.edu.br.patrimonioapi.DTO.PatrimonioDTO;
 import bri.ifsp.edu.br.patrimonioapi.config.Page;
 import bri.ifsp.edu.br.patrimonioapi.message.Response;
 import bri.ifsp.edu.br.patrimonioapi.model.Area;
-import bri.ifsp.edu.br.patrimonioapi.model.Patrimonio;
 import bri.ifsp.edu.br.patrimonioapi.service.errors.ErrorsData;
 import bri.ifsp.edu.br.patrimonioapi.service.errors.TestarCampoRequerido;
 
@@ -97,11 +98,29 @@ public class AreaService extends DataBaseTransactionService<Area, Long> {
     public Page<Area> listaPaginada(int paginaAtual, int tamanhoPagina) {
         return dao.listaPaginada(paginaAtual, tamanhoPagina);
     }
-
     @Override
     public Page<Area> listaPaginada(int paginaAtual, int tamanhoPagina, String text) {
         return dao.listaPaginada(paginaAtual, tamanhoPagina, text);
     }
+    @Override
+    public Page<AreaDTO> dtoPaginado(int paginAtual, int tamanhoPagina){
+        return dao.paginadoDTO(paginAtual,tamanhoPagina);
+    }
+    @Override
+    public Page<AreaDTO> dtoPaginado(int paginAtual, int tamanhoPagina, String text){
+        return dao.paginadoDTO(paginAtual,tamanhoPagina,text);
+    }
+
+    @Override
+    public Page<PatrimonioDTO> patrimonioDtoPaginado(int paginAtual, int tamanhoPagina) {
+        return null;
+    }
+
+    @Override
+    public Page<PatrimonioDTO> patrimonioDtoPaginado(int paginAtual, int tamanhoPagina, String text) {
+        return null;
+    }
+
     @Override
     public List<Area> listar(){
     	return dao.listarArea();

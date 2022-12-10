@@ -1,7 +1,6 @@
 package bri.ifsp.edu.br.patrimonioapi.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
@@ -16,10 +15,6 @@ public class Lista {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "ID_AREA")
     private Area area;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "ID_SERVIDOR")
-    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "ID_PATRIMONIO")
@@ -41,14 +36,6 @@ public class Lista {
         this.area = area;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     public Patrimonio getPatrimonio() {
         return patrimonio;
     }
@@ -60,10 +47,9 @@ public class Lista {
     public Lista() {
     }
 
-    public Lista(Long id, Area area, Usuario usuario, Patrimonio patrimonio) {
+    public Lista(Long id, Area area, Patrimonio patrimonio) {
         this.id = id;
         this.area = area;
-        this.usuario = usuario;
         this.patrimonio = patrimonio;
     }
 
@@ -72,12 +58,12 @@ public class Lista {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Lista lista = (Lista) o;
-        return Objects.equals(id, lista.id) && Objects.equals(area, lista.area) && Objects.equals(usuario, lista.usuario) && Objects.equals(patrimonio, lista.patrimonio);
+        return Objects.equals(id, lista.id) && Objects.equals(area, lista.area) && Objects.equals(patrimonio, lista.patrimonio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, area, usuario, patrimonio);
+        return Objects.hash(id, area, patrimonio);
     }
 
     @Override
@@ -85,7 +71,6 @@ public class Lista {
         return "Lista{" +
                 "id=" + id +
                 ", area=" + area +
-                ", usuario=" + usuario +
                 ", patrimonio=" + patrimonio +
                 '}';
     }

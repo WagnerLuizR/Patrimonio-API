@@ -1,8 +1,13 @@
 package bri.ifsp.edu.br.patrimonioapi.model;
 
+import bri.ifsp.edu.br.patrimonioapi.DTO.AreaDTO;
+import bri.ifsp.edu.br.patrimonioapi.service.errors.CampoRequerido;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "TB_AREA")
@@ -13,11 +18,17 @@ public class Area implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @CampoRequerido(valor = 1, mensagem = "O nome da Área deve ser informado")
     @Column(name = "NOME_AREA")
     private String nomeArea;
 
+    @CampoRequerido(valor = 2, mensagem = "O tipo de Área deve ser informado")
     @Column(name = "TIPO_AREA")
     private Integer tipoArea;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "area")
+    private Set<Patrimonio> patrimonios;
 
     public Long getId() {
         return id;
@@ -43,7 +54,26 @@ public class Area implements Serializable {
         this.tipoArea = tipoArea;
     }
 
+    @JsonIgnore
+    public Set<Patrimonio> getPatrimonios() {
+        return patrimonios;
+    }
+
+    @JsonIgnore
+    public void setPatrimonios(Set<Patrimonio> patrimonios) {
+        this.patrimonios = patrimonios;
+    }
+
     public Area() {
+    }
+
+    public Area(AreaDTO areaDTO) {
+        this.id = areaDTO.getId();
+        this.nomeArea = areaDTO.getNomeArea();
+        if (areaDTO.getTipoArea().equalsIgnoreCase("EXTERNA")) this.tipoArea = 1;
+        else if (areaDTO.getTipoArea().equalsIgnoreCase("SALA DE AULA")) this.tipoArea = 2;
+        else if (areaDTO.getTipoArea().equalsIgnoreCase("LABORATÓRIO")) this.tipoArea = 3;
+        else if (areaDTO.getTipoArea().equalsIgnoreCase("ADMINISTRATIVO")) this.tipoArea = 4;
     }
 
     public Area(Long id, String nomeArea, Integer tipoArea) {

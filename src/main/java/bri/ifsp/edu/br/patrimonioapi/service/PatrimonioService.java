@@ -1,14 +1,23 @@
 package bri.ifsp.edu.br.patrimonioapi.service;
 
 import bri.ifsp.edu.br.patrimonioapi.DAO.PatrimonioDAO;
+import bri.ifsp.edu.br.patrimonioapi.DTO.AreaDTO;
+import bri.ifsp.edu.br.patrimonioapi.DTO.PatrimonioDTO;
 import bri.ifsp.edu.br.patrimonioapi.config.Page;
 import bri.ifsp.edu.br.patrimonioapi.message.Response;
 import bri.ifsp.edu.br.patrimonioapi.model.Patrimonio;
 import bri.ifsp.edu.br.patrimonioapi.service.errors.ErrorsData;
 import bri.ifsp.edu.br.patrimonioapi.service.errors.TestarCampoRequerido;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PatrimonioService extends DataBaseTransactionService<Patrimonio, Long> {
     private PatrimonioDAO dao;
@@ -41,6 +50,7 @@ public class PatrimonioService extends DataBaseTransactionService<Patrimonio, Lo
     public Response alterar(Patrimonio patrimonio) {
         try {
             getTransaction();
+            dao.consultarPorId(patrimonio.getCodigo());
             patrimonio = dao.alterar(patrimonio);
             getCommit();
             response = getMessageResponse().message(patrimonio, "Registro cadastrado com sucesso!", false);
@@ -91,6 +101,21 @@ public class PatrimonioService extends DataBaseTransactionService<Patrimonio, Lo
         return response;
     }
 
+    public String exportReport() throws FileNotFoundException, JRException {
+        String path = "C:\\Users\\wagner\\Documents\\Patrimonio-API-main\\Patrimonio-API-main\\src\\main\\resources\\reports";
+        List<PatrimonioDTO> patrimonio = listar().stream().map(PatrimonioDTO::new).collect(Collectors.toList());
+        //load file and compile it
+        File file = new File( "classpath:PatrimonioReports.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(patrimonio);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("createdBy", "Patrimonio-API");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\Patrimonio.pdf");
+
+        return "report generated in path : " + path;
+    }
+
     @Override
     public Page<Patrimonio> listaPaginada(int paginaAtual, int tamanhoPagina) {
         return dao.listaPaginada(paginaAtual, tamanhoPagina);
@@ -100,7 +125,29 @@ public class PatrimonioService extends DataBaseTransactionService<Patrimonio, Lo
     public Page<Patrimonio> listaPaginada(int paginaAtual, int tamanhoPagina, String text) {
         return dao.listaPaginada(paginaAtual, tamanhoPagina, text);
     }
-    
+
+    @Override
+    public Page<AreaDTO> dtoPaginado(int paginAtual, int tamanhoPagina) {
+        return null;
+    }
+
+    @Override
+    public Page<AreaDTO> dtoPaginado(int paginAtual, int tamanhoPagina, String text) {
+        return null;
+    }
+
+    public String exportData() throws JRException, FileNotFoundException {
+        return exportReport();
+    }
+
+    @Override
+    public Page<PatrimonioDTO> patrimonioDtoPaginado(int paginAtual, int tamanhoPagina){
+        return dao.patrimonioPaginadoDTO(paginAtual,tamanhoPagina);
+    }
+    @Override
+    public Page<PatrimonioDTO> patrimonioDtoPaginado(int paginAtual, int tamanhoPagina, String text){
+        return dao.patrimonioPaginadoDTO(paginAtual,tamanhoPagina,text);
+    }
     @Override
     public List<Patrimonio> listar(){
     	return dao.listaPatrimonio();

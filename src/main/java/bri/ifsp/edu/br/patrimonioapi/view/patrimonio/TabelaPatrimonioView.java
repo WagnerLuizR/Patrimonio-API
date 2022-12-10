@@ -1,11 +1,15 @@
 package bri.ifsp.edu.br.patrimonioapi.view.patrimonio;
 
+import bri.ifsp.edu.br.patrimonioapi.DTO.PatrimonioDTO;
+import bri.ifsp.edu.br.patrimonioapi.DTO.PatrimonioReportDTO;
 import bri.ifsp.edu.br.patrimonioapi.config.Constantes;
 import bri.ifsp.edu.br.patrimonioapi.config.Page;
 import bri.ifsp.edu.br.patrimonioapi.model.Patrimonio;
 import bri.ifsp.edu.br.patrimonioapi.service.PatrimonioService;
 import bri.ifsp.edu.br.patrimonioapi.view.table.RenderHeaderTable;
 import bri.ifsp.edu.br.patrimonioapi.view.table.RenderTable;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -15,7 +19,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TabelaPatrimonioView extends JFrame {
 
@@ -33,11 +44,13 @@ public class TabelaPatrimonioView extends JFrame {
     private JButton btnAlterar;
     private JButton btnExcluir;
     private JButton btnConsultar;
+    private JButton btnExportar;
     private JButton btnSair;
     private TabelaPatrimonioModel model;
-    private Page<Patrimonio> page;
+    private Page<PatrimonioDTO> page;
     private PatrimonioService patrimonioService;
-    private Patrimonio patrimonio;
+    private Patrimonio patrimonioEntity;
+    private PatrimonioDTO patrimonio;
     private int linha = 0;
     private int coluna = 0;
     private int tamanhoPagina = 10;
@@ -97,7 +110,7 @@ public class TabelaPatrimonioView extends JFrame {
 
         btnIncluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                showPatrimonioFrame(Constantes.INCLUIR);
+                showPatrimonioFrame(Constantes.INCLUIR,true);
                 iniciarTabela();
             }
         });
@@ -111,14 +124,14 @@ public class TabelaPatrimonioView extends JFrame {
         btnAlterar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getLinhaTabela();
-                showPatrimonioFrame(Constantes.ALTERAR);
+                showPatrimonioFrame(Constantes.ALTERAR,true);
                 iniciarTabela();
             }
         });
         btnExcluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getLinhaTabela();
-                showPatrimonioFrame(Constantes.EXCLUIR);
+                showPatrimonioFrame(Constantes.EXCLUIR,false);
                 iniciarTabela();
 
             }
@@ -126,7 +139,7 @@ public class TabelaPatrimonioView extends JFrame {
         btnConsultar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getLinhaTabela();
-                showPatrimonioFrame(Constantes.CONSULTAR);
+                showPatrimonioFrame(Constantes.CONSULTAR,true);
             }
         });
         nomePesquisa.addKeyListener(new KeyAdapter() {
@@ -136,6 +149,15 @@ public class TabelaPatrimonioView extends JFrame {
             }
         });
 
+        btnExportar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    exportarPatrimonio();
+                } catch (JRException | FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
     }
 
@@ -226,6 +248,12 @@ public class TabelaPatrimonioView extends JFrame {
         btnConsultar.setBounds(307, 478, 127, 33);
         contentPane.add(btnConsultar);
 
+        btnExportar = new JButton("Exportar");
+        btnExportar.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnExportar.setBounds(450, 478, 127, 33);
+        contentPane.add(btnExportar);
+
+
         btnSair = new JButton("Fechar");
         btnSair.setFont(new Font("Verdana", Font.BOLD, 14));
         btnSair.setBounds(645, 478, 127, 33);
@@ -255,27 +283,45 @@ public class TabelaPatrimonioView extends JFrame {
         for (int col = 0; col < model.getColumnCount(); col++) {
             TableColumn coluna = tabelaPatrimonio.getColumnModel().getColumn(col);
             coluna.setMinWidth(100);
-            coluna.setMaxWidth(100);
-            coluna.setPreferredWidth(100);
+            coluna.setMaxWidth(200);
+            coluna.setPreferredWidth(150);
         }
     }
 
 
     private void getLinhaTabela() {
         patrimonio = getPatrimonio();
+        patrimonioEntity = getPatrimonioEntity();
         if (tabelaPatrimonio.getSelectedRow() != -1) {
             linha = tabelaPatrimonio.getSelectedRow();
             coluna = tabelaPatrimonio.getSelectedColumn();
             patrimonio = model.getPatrimonio(linha);
+
+            patrimonioEntity = new Patrimonio(model.getPatrimonio(linha));
         } else {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na Tabela", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void showPatrimonioFrame(Integer opcaoCadastro) {
-        PatrimonioView view = new PatrimonioView(patrimonio, opcaoCadastro);
+    private void showPatrimonioFrame(Integer opcaoCadastro,boolean showModel) {
+        PatrimonioView view = new PatrimonioView(patrimonioEntity, opcaoCadastro);
         view.setLocationRelativeTo(null);
-        view.setVisible(true);
+        view.setVisible(showModel);
+    }
+
+    private void exportarPatrimonio() throws JRException, FileNotFoundException {
+        patrimonioService = getPatrimonioService();
+        String path = "C:\\Users\\wagner\\Documents\\Patrimonio-API-main\\Patrimonio-API-main\\src\\main\\resources\\reports";
+        List<PatrimonioReportDTO> patrimonio = patrimonioService.listar().stream().map(PatrimonioReportDTO::new).collect(Collectors.toList());
+        //load file and compile it
+        InputStream file = this.getClass().getClassLoader().getResourceAsStream("PatrimonioReports.jrxml");
+        //File file = new File( "classpath:PatrimonioReports.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file);
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(patrimonio);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("createdBy", "Patrimonio-API");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, path + "/Patrimonio.pdf");
     }
 
     private void listarPatrimonio() {
@@ -283,9 +329,9 @@ public class TabelaPatrimonioView extends JFrame {
         patrimonioService = getPatrimonioService();
 
         if (nomePesquisa.equals("")) {
-            page = patrimonioService.listaPaginada(paginaAtual, tamanhoPagina);
+            page = patrimonioService.patrimonioDtoPaginado(paginaAtual, tamanhoPagina);
         } else {
-            page = patrimonioService.listaPaginada(paginaAtual, tamanhoPagina, nomePesquisa.getText());
+            page = patrimonioService.patrimonioDtoPaginado(paginaAtual, tamanhoPagina, nomePesquisa.getText());
         }
 
         if (paginaAtual == 1) {
@@ -332,7 +378,11 @@ public class TabelaPatrimonioView extends JFrame {
         this.coluna = coluna;
     }
 
-    public Patrimonio getPatrimonio() {
+    public Patrimonio getPatrimonioEntity() {
         return new Patrimonio();
+    }
+
+    public PatrimonioDTO getPatrimonio() {
+        return new PatrimonioDTO();
     }
 }

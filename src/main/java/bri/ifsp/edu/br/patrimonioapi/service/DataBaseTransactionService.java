@@ -1,5 +1,7 @@
 package bri.ifsp.edu.br.patrimonioapi.service;
 
+import bri.ifsp.edu.br.patrimonioapi.DTO.AreaDTO;
+import bri.ifsp.edu.br.patrimonioapi.DTO.PatrimonioDTO;
 import bri.ifsp.edu.br.patrimonioapi.config.Page;
 import bri.ifsp.edu.br.patrimonioapi.message.MessageResponse;
 import bri.ifsp.edu.br.patrimonioapi.message.ModelResponse;
@@ -14,7 +16,7 @@ import java.util.Objects;
 
 public abstract class DataBaseTransactionService<T, ID> {
 
-    @PersistenceContext(unitName = "appvendas")
+    @PersistenceContext(unitName = "patrimonio")
     private EntityManager entityManager;
 
     protected List<ErrorsData> errorsData;
@@ -62,7 +64,15 @@ public abstract class DataBaseTransactionService<T, ID> {
     public abstract Page<T> listaPaginada(int paginaAtual, int tamanhoPagina);
 
     public abstract Page<T> listaPaginada(int paginaAtual, int tamanhoPagina, String text);
-    
+
+    public abstract Page<AreaDTO> dtoPaginado(int paginAtual, int tamanhoPagina);
+
+    public abstract Page<AreaDTO> dtoPaginado(int paginAtual, int tamanhoPagina, String text);
+
+    public abstract Page<PatrimonioDTO> patrimonioDtoPaginado(int paginAtual, int tamanhoPagina);
+
+    public abstract Page<PatrimonioDTO> patrimonioDtoPaginado(int paginAtual, int tamanhoPagina, String text);
+
     public abstract List<T> listar();
 
     public abstract Response validarDadosFromView(T objeto);

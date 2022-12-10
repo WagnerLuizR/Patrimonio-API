@@ -37,20 +37,20 @@ public class MenuView extends JFrame {
         eventHandler();
 
         btnArea.setText("Incluir Area");
-        btnArea.setFont(new Font("Verdana", Font.BOLD, 10));
-        btnArea.setBounds(438, 181, 149, 52);
+        btnArea.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnArea.setBounds(231, 201, 220, 78);
 
         btnTabelaArea.setText("Abrir Tabela de Área");
-        btnTabelaArea.setFont(new Font("Verdana", Font.BOLD, 10));
-        btnTabelaArea.setBounds(438, 318, 149, 52);
+        btnTabelaArea.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnTabelaArea.setBounds(231, 470, 220, 78);
         
         btnPatrimonio.setText("Incluir Patrimonio");
-        btnPatrimonio.setFont(new Font("Verdana", Font.BOLD, 10));
-        btnPatrimonio.setBounds(101, 181, 149, 52);
+        btnPatrimonio.setFont(new Font("Verdana", Font.BOLD, 14));
+        btnPatrimonio.setBounds(231, 72, 220, 78);
         
         btnTabelaPatrimonio.setText("Abrir Tabela de Patrimonio");
-        btnTabelaPatrimonio.setFont(new Font("Verdana", Font.BOLD, 10));
-        btnTabelaPatrimonio.setBounds(101, 318, 149, 52);
+        btnTabelaPatrimonio.setFont(new Font("Verdana", Font.BOLD, 12));
+        btnTabelaPatrimonio.setBounds(231, 327, 220, 78);
         
     }
 
@@ -73,7 +73,8 @@ public class MenuView extends JFrame {
         contentPane.setLayout(null);
 
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(30, 144, 255));
+        panel.setForeground(new Color(121, 210, 230));
+        panel.setBackground(new Color(48, 101,172));
         panel.setBounds(0, 0, 688, 611);
         contentPane.add(panel);
         panel.setLayout(null);
@@ -101,6 +102,8 @@ public class MenuView extends JFrame {
         panel.add(btnCancelar);
         
         JLabel lblTelaMenu = new JLabel("Menu");
+        lblTelaMenu.setForeground(new Color(121, 210, 230));
+        lblTelaMenu.setBackground(new Color(121, 210,2));
         lblTelaMenu.setFont(new Font("Verdana", Font.BOLD, 30));
         lblTelaMenu.setBounds(26, 11, 161, 33);
         panel.add(lblTelaMenu);

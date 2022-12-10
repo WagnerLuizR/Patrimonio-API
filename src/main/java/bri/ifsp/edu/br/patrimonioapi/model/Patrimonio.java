@@ -1,5 +1,7 @@
 package bri.ifsp.edu.br.patrimonioapi.model;
 
+import bri.ifsp.edu.br.patrimonioapi.DTO.PatrimonioDTO;
+import bri.ifsp.edu.br.patrimonioapi.service.errors.CampoRequerido;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -16,17 +18,25 @@ public class Patrimonio implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo;
 
+    @CampoRequerido(valor=1, mensagem = "A descrição do Patrimonio deve ser informado")
     @Column(name = "desc_patrimonio")
     private String descPatrimonio;
 
+    @CampoRequerido(valor=1, mensagem = "A estado do Patrimonio deve ser informado")
     @Column(name = "ESTADO")
     private Integer estado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    //referência do relacionamento de muitos para um com fetchType sendo Lazy
-    @JoinColumn(name = "ID_AREA")
-    //sabendo a coluna de referência relacionma apenas o id da entidade para unificar
-    // na coluna da tabela que vai armazenar apenas o id
+    @Column(name = "IDENTIFICADOR")
+    private String identificador;
+
+
+    @Column(name = "ID_AREA")
+    private Long idArea;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Area.class)
+    @MapsId("ID_AREA")
+    @JoinColumn(name = "ID_AREA", insertable = false, updatable = false)
     private Area area;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "patrimonio")  //referência do relacionamento de um para muitos que
@@ -59,18 +69,31 @@ public class Patrimonio implements Serializable {
         this.estado = estado;
     }
 
+    @JsonIgnore
     public Area getArea() {
         return area;
     }
 
+    @JsonIgnore
     public void setArea(Area area) {
         this.area = area;
     }
 
+
+    public Long getIdArea() {
+        return idArea;
+    }
+
+    public void setIdArea(Long idArea) {
+        this.idArea = idArea;
+    }
+
+    @JsonIgnore
     public Set<Lista> getLista() {
         return lista;
     }
 
+    @JsonIgnore
     public void setLista(Set<Lista> lista) {
         this.lista = lista;
     }
@@ -78,10 +101,30 @@ public class Patrimonio implements Serializable {
     public Patrimonio() {
     }
 
-    public Patrimonio(Long codigo, String descPatrimonio, Integer estado, Area area, Set<Lista> lista) {
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
+    }
+
+    public Patrimonio(PatrimonioDTO patrimonioDTO){
+        this.codigo = patrimonioDTO.getCodigo();
+        this.descPatrimonio = patrimonioDTO.getDescPatrimonio();
+        this.identificador = patrimonioDTO.getIdentificador();
+        if (patrimonioDTO.getEstado().equalsIgnoreCase("NOVO")) this.estado = 1;
+        else if (patrimonioDTO.getEstado().equalsIgnoreCase("USADO")) this.estado = 2;
+        else if (patrimonioDTO.getEstado().equalsIgnoreCase("DANIFICADO")) this.estado = 3;
+        this.area = patrimonioDTO.getArea();
+    }
+
+    public Patrimonio(Long codigo, String descPatrimonio, Integer estado, String identificador, Long idArea, Area area, Set<Lista> lista) {
         this.codigo = codigo;
         this.descPatrimonio = descPatrimonio;
         this.estado = estado;
+        this.identificador = identificador;
+        this.idArea = idArea;
         this.area = area;
         this.lista = lista;
     }
@@ -91,20 +134,23 @@ public class Patrimonio implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Patrimonio that = (Patrimonio) o;
-        return Objects.equals(codigo, that.codigo) && Objects.equals(descPatrimonio, that.descPatrimonio) && Objects.equals(estado, that.estado) && Objects.equals(area, that.area) && Objects.equals(lista, that.lista);
+        return codigo.equals(that.codigo) && descPatrimonio.equals(that.descPatrimonio) && estado.equals(that.estado) && identificador.equals(that.identificador) && idArea.equals(that.idArea) && area.equals(that.area) && lista.equals(that.lista);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codigo, descPatrimonio, estado, area, lista);
+        return Objects.hash(codigo, descPatrimonio, estado, identificador, idArea, area, lista);
     }
 
+
     @Override
-    public String   toString() {
+    public String toString() {
         return "Patrimonio{" +
                 "codigo=" + codigo +
                 ", descPatrimonio='" + descPatrimonio + '\'' +
                 ", estado=" + estado +
+                ", identificador='" + identificador + '\'' +
+                ", idArea=" + idArea +
                 ", area=" + area +
                 ", lista=" + lista +
                 '}';

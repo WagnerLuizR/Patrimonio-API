@@ -1,10 +1,11 @@
 package bri.ifsp.edu.br.patrimonioapi.view.patrimonio;
 
+import bri.ifsp.edu.br.patrimonioapi.DTO.PatrimonioDTO;
 import bri.ifsp.edu.br.patrimonioapi.config.Constantes;
-import bri.ifsp.edu.br.patrimonioapi.config.Page;
 import bri.ifsp.edu.br.patrimonioapi.message.ModelResponse;
 import bri.ifsp.edu.br.patrimonioapi.model.Area;
 import bri.ifsp.edu.br.patrimonioapi.model.Patrimonio;
+import bri.ifsp.edu.br.patrimonioapi.serial.ConexaoSerial;
 import bri.ifsp.edu.br.patrimonioapi.service.AreaService;
 import bri.ifsp.edu.br.patrimonioapi.service.PatrimonioService;
 import bri.ifsp.edu.br.patrimonioapi.service.errors.ErrorsData;
@@ -14,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
+import java.util.Objects;
 
 public class PatrimonioView extends JFrame {
 
@@ -23,10 +25,11 @@ public class PatrimonioView extends JFrame {
     private JTextField codigo;
     private JTextField estado;
     private JComboBox<String> nomeAreaCombo;
+    private String identificador;
 
     private JButton btnSalvar;
     private JButton btnCancelar;
-
+    private JButton btnLeituraSerial;
     private JLabel mensagemCodigo;
     private JLabel mensagemDescPatrimonio;
     private JLabel mensagemEstado;
@@ -37,10 +40,16 @@ public class PatrimonioView extends JFrame {
     private Patrimonio patrimonio;
 
     private AreaService areaService;
+    private ConexaoSerial conexaoSerial;
 
     private ModelResponse<Patrimonio> modelResponse;
 
     private ModelResponse<ErrorsData> errors;
+    private JLabel lblTelaPatrimonio;
+    private JLabel lblNewLabel;
+    private JLabel lblNewLabel_1;
+    private JLabel lblNewLabel_2;
+    private JLabel lblNewLabel_3;
 
 
     /**
@@ -54,13 +63,17 @@ public class PatrimonioView extends JFrame {
 
         btnSalvar.setText("Salvar");
         btnCancelar.setText("Cancelar");
+        btnLeituraSerial.setText("Ler Serial");
 
         if (opcaoCadastro == Constantes.INCLUIR) {
             btnSalvar.setFont(new Font("Verdana", Font.BOLD, 20));
-            btnSalvar.setBounds(178, 24, 149, 52);
+            btnSalvar.setBounds(28, 24, 149, 52);
             btnCancelar.setFont(new Font("Verdana", Font.BOLD, 20));
-            btnCancelar.setBounds(347, 24, 149, 52);
+            btnCancelar.setBounds(220, 24, 149, 52);
             btnCancelar = new JButton("Cancelar");
+            btnLeituraSerial.setText("Ler Serial");
+            btnLeituraSerial.setFont(new Font("Verdana", Font.BOLD, 20));
+            btnLeituraSerial.setBounds(420, 24, 149, 52);
         } else if (opcaoCadastro == Constantes.ALTERAR) {
             consultarPatrimonio(patrimonio.getCodigo());
             btnSalvar.setFont(new Font("Verdana", Font.BOLD, 20));
@@ -68,7 +81,7 @@ public class PatrimonioView extends JFrame {
             btnCancelar.setFont(new Font("Verdana", Font.BOLD, 20));
             btnCancelar.setBounds(347, 24, 149, 52);
         } else if (opcaoCadastro == Constantes.EXCLUIR) {
-            consultarPatrimonio(patrimonio.getCodigo());
+            excluirPatrimonio(patrimonio.getCodigo());
             btnSalvar.setText("Excluir");
             btnSalvar.setFont(new Font("Verdana", Font.BOLD, 20));
             btnSalvar.setBounds(178, 24, 149, 52);
@@ -93,15 +106,16 @@ public class PatrimonioView extends JFrame {
         contentPane.setLayout(null);
 
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(30, 144, 255));
+        panel.setBackground(new Color(48, 101, 172));
         panel.setBounds(0, 0, 688, 523);
         contentPane.add(panel);
         panel.setLayout(null);
 
         JLabel lbldescPatrimonio = new JLabel("Descrição:");
+        lbldescPatrimonio.setForeground(new Color(121, 210, 230));
         lbldescPatrimonio.setHorizontalAlignment(SwingConstants.CENTER);
         lbldescPatrimonio.setFont(new Font("Verdana", Font.BOLD, 20));
-        lbldescPatrimonio.setBounds(24, 60, 145, 36);
+        lbldescPatrimonio.setBounds(23, 118, 145, 36);
         panel.add(lbldescPatrimonio);
 
         descPatrimonio = new JTextField();
@@ -124,51 +138,82 @@ public class PatrimonioView extends JFrame {
         descPatrimonio.setBorder(null);
         descPatrimonio.setColumns(10);
         descPatrimonio.setFont(new Font("Verdana", Font.PLAIN, 20));
-        descPatrimonio.setBounds(179, 60, 403, 36);
+        descPatrimonio.setBounds(178, 118, 403, 36);
         panel.add(descPatrimonio);
 
         JLabel lblEstado = new JLabel("Estado:");
+        lblEstado.setForeground(new Color(121, 210, 230));
         lblEstado.setHorizontalAlignment(SwingConstants.CENTER);
         lblEstado.setFont(new Font("Verdana", Font.BOLD, 20));
-        lblEstado.setBounds(10, 126, 145, 36);
+        lblEstado.setBounds(10, 179, 145, 36);
         panel.add(lblEstado);
 
         estado = new JTextField();
         estado.setFont(new Font("Verdana", Font.PLAIN, 20));
         estado.setColumns(10);
         estado.setBorder(null);
-        estado.setBounds(179, 126, 403, 36);
+        estado.setBounds(179, 179, 403, 36);
         panel.add(estado);
 
         JLabel lblNomeArea = new JLabel("Área:");
+        lblNomeArea.setForeground(new Color(121, 210, 230));
         lblNomeArea.setHorizontalAlignment(SwingConstants.CENTER);
         lblNomeArea.setFont(new Font("Verdana", Font.BOLD, 20));
-        lblNomeArea.setBounds(0, 192, 145, 36);
+        lblNomeArea.setBounds(10, 238, 145, 36);
         panel.add(lblNomeArea);
 
         mensagemDescPatrimonio = new JLabel("");
-        mensagemDescPatrimonio.setBounds(179, 60, 403, 14);
+        mensagemDescPatrimonio.setBounds(178, 128, 403, 14);
         panel.add(mensagemDescPatrimonio);
 
         mensagemEstado = new JLabel("");
-        mensagemEstado.setBounds(179, 126, 403, 14);
+        mensagemEstado.setBounds(179, 187, 403, 14);
         panel.add(mensagemEstado);
 
         mensagemArea = new JLabel("");
-        mensagemArea.setBounds(179, 201, 403, 14);
+        mensagemArea.setBounds(179, 248, 403, 14);
         panel.add(mensagemArea);
 
-        JComboBox<String> area = new JComboBox();
-        area.setBounds(179, 196, 403, 36);
+        nomeAreaCombo = new JComboBox();
+        nomeAreaCombo.setBounds(179, 238, 403, 36);
         areaService = getAreaService();
-        List<Area> getArea  = areaService.listar();;
-        getArea.forEach(a->{
-            area.addItem(a.getNomeArea());
+        List<Area> getArea = areaService.listar();
+        ;
+        getArea.forEach(a -> {
+            nomeAreaCombo.addItem(a.getNomeArea());
         });
-        panel.add(area);
+        panel.add(nomeAreaCombo);
+        
+        lblTelaPatrimonio = new JLabel("Cadastro de Patrimônio");
+        lblTelaPatrimonio.setForeground(new Color(121, 210, 230));
+        lblTelaPatrimonio.setBackground(new Color(121, 210,2));
+        lblTelaPatrimonio.setFont(new Font("Verdana", Font.BOLD, 30));
+        lblTelaPatrimonio.setBounds(23, 11, 453, 38);
+
+        panel.add(lblTelaPatrimonio);
+        
+        lblNewLabel = new JLabel("Para Preecher o Estado, Digite:");
+        lblNewLabel.setForeground(new Color(121, 210, 230));
+        lblNewLabel.setBounds(59, 303, 197, 36);
+        panel.add(lblNewLabel);
+        
+        lblNewLabel_1 = new JLabel("1 - Patrimônio Novo");
+        lblNewLabel_1.setForeground(new Color(121, 210, 230));
+        lblNewLabel_1.setBounds(59, 332, 181, 36);
+        panel.add(lblNewLabel_1);
+        
+        lblNewLabel_2 = new JLabel("2 - Patrimônio Usado (já com alguns defeitos)");
+        lblNewLabel_2.setForeground(new Color(121, 210, 230));
+        lblNewLabel_2.setBounds(59, 367, 257, 14);
+        panel.add(lblNewLabel_2);
+        
+        lblNewLabel_3 = new JLabel("3  - Patrimônio Danificado ou Quebrado (inutilizavel)");
+        lblNewLabel_3.setForeground(new Color(121, 210, 230));
+        lblNewLabel_3.setBounds(59, 392, 257, 14);
+        panel.add(lblNewLabel_3);
 
         JPanel panelBotoes = new JPanel();
-        panelBotoes.setBackground(new Color(0, 128, 0));
+        panelBotoes.setBackground(new Color(121, 210, 230));
         panelBotoes.setBounds(0, 521, 696, 99);
         contentPane.add(panelBotoes);
         panelBotoes.setLayout(null);
@@ -178,6 +223,9 @@ public class PatrimonioView extends JFrame {
 
         btnCancelar = new JButton();
         panelBotoes.add(btnCancelar);
+
+        btnLeituraSerial = new JButton();
+        panelBotoes.add(btnLeituraSerial);
 
         mensagemDescPatrimonio.setVisible(false);
         mensagemEstado.setVisible(false);
@@ -202,6 +250,15 @@ public class PatrimonioView extends JFrame {
             }
         });
 
+        btnLeituraSerial.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    conectarPortaSerial();
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -247,14 +304,25 @@ public class PatrimonioView extends JFrame {
 
     }
 
+    @SuppressWarnings("unchecked")
+    public void conectarPortaSerial() throws InterruptedException {
+        patrimonio = getPatrimonio();
+        ConexaoSerial serial = new ConexaoSerial();
+        identificador = "D1F4G5";
+        patrimonio.setIdentificador(identificador);
+        if (serial.iniciaSerial()) {
+            //String identificador = serial.getProtocolo().getCodigoPatrimonio();
+            Thread.sleep(5000);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public void alterarPatrimonio() {
 
         patrimonioService = getPatrimonioService();
         patrimonio = getPatrimonio();
-        patrimonio.setCodigo(codigoPatrimonio);
         setPatrimonioFromView();
+        patrimonio.setCodigo(codigoPatrimonio);
         modelResponse = (ModelResponse<Patrimonio>) patrimonioService.alterar(patrimonio);
         if (modelResponse.isError()) {
             JOptionPane.showMessageDialog(null, modelResponse.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -267,9 +335,10 @@ public class PatrimonioView extends JFrame {
 
 
     @SuppressWarnings("unchecked")
-    public void excluirPatrimonio() {
+    public void excluirPatrimonio(Long id) {
         patrimonioService = getPatrimonioService();
-        setPatrimonioFromView();
+        patrimonio = getPatrimonio();
+        patrimonio.setCodigo(id);
         modelResponse = (ModelResponse<Patrimonio>) patrimonioService.excluir(patrimonio);
         if (modelResponse.isError()) {
             JOptionPane.showMessageDialog(null, modelResponse.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -301,8 +370,15 @@ public class PatrimonioView extends JFrame {
     private void getPatrimonioFromDataBase() {
         codigoPatrimonio = patrimonio.getCodigo();
         descPatrimonio.setText(patrimonio.getDescPatrimonio());
-        codigo.setText(patrimonio.getCodigo().toString());
         estado.setText(patrimonio.getEstado().toString());
+        areaService = getAreaService();
+        Object descArea = nomeAreaCombo.getSelectedItem();
+        List<Area> getArea = areaService.listar();
+        getArea.forEach(a -> {
+            if (Objects.equals(a.getNomeArea(), descArea)) {
+                patrimonio.setIdArea(a.getId());
+            }
+        });
     }
 
     private void limparPatrimonioView() {
@@ -313,15 +389,16 @@ public class PatrimonioView extends JFrame {
     }
 
     private void setPatrimonioFromView() {
+        patrimonio = getPatrimonio();
         areaService = getAreaService();
-        List<Area> getArea  = areaService.listar();
-
-        patrimonio.setCodigo(Long.getLong(codigo.getText()));
+        List<Area> getArea = areaService.listar();
+        Object descArea = nomeAreaCombo.getSelectedItem();
+        patrimonio.setIdentificador(identificador);
         patrimonio.setDescPatrimonio(descPatrimonio.getText());
-        patrimonio.setEstado(Integer.getInteger(estado.getText()));
-        getArea.forEach(a->{
-            if(a.getNomeArea() == nomeAreaCombo.getSelectedItem()){
-                patrimonio.setArea(a);
+        patrimonio.setEstado(Integer.parseInt(estado.getText()));
+        getArea.forEach(a -> {
+            if (Objects.equals(a.getNomeArea(), descArea)) {
+                patrimonio.setIdArea(a.getId());
             }
         });
     }
@@ -333,8 +410,13 @@ public class PatrimonioView extends JFrame {
     public PatrimonioService getPatrimonioService() {
         return new PatrimonioService();
     }
-    public AreaService getAreaService(){
+
+    public AreaService getAreaService() {
         return new AreaService();
+    }
+
+    public ConexaoSerial getConexaoSerial() {
+        return new ConexaoSerial();
     }
 
     public ModelResponse<Patrimonio> getModelResponse() {
